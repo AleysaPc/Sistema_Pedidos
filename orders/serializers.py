@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Orden, DetalleOrden, HistorialOrden, Notificacion
 from restaurants.serializers import ProductoSerializer
+from .utils import crear_notificacion
 
 class DetalleOrdenSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer(read_only=True)
@@ -19,7 +20,6 @@ class OrdenSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         detalles_data = validated_data.pop('detalles_orden', [])
-
         orden = Orden.objects.create(**validated_data)
 
         for detalle in detalles_data:
@@ -29,6 +29,13 @@ class OrdenSerializer(serializers.ModelSerializer):
                 cantidad=detalle['cantidad'],
                 precio=detalle.get('precio')
             )
+
+        # Notificar al propietario del restaurante cuando se crea una orden
+        crear_notificacion(
+            usuario=orden.restaurante.propietario,
+            mensaje=f"Nuevo pedido {orden.numero_orden} recibido",
+            orden=orden
+        )
 
         return orden
 

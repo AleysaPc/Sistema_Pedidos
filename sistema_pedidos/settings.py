@@ -84,7 +84,10 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+AUTHENTICATION_BACKENDS = [
+    "users.auth_backend.EmailAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 WSGI_APPLICATION = 'sistema_pedidos.wsgi.application'
 
 
