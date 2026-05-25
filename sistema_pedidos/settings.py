@@ -66,10 +66,11 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://front-end-sistema-pedidos-quxl-huo268ope.vercel.app",
+    "https://front-end-sistema-pedidos-quxl.vercel.app",
 ]
+
 CSRF_TRUSTED_ORIGINS = [
-    "https://front-end-sistema-pedidos-quxl-huo268ope.vercel.app",
+    "https://front-end-sistema-pedidos-quxl.vercel.app",
 ]
 
 # ---------------- URL ROOT ----------------
