@@ -30,10 +30,12 @@ AUTH_USER_MODEL = 'users.User'
 SECRET_KEY = 'django-insecure-pmd$48znr6ux*%i80a3u5_4s35ta2_fwh+q4c#6$ke=z4!n#cj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = [
+    "sistema-pedidos-rqhc.onrender.com",
+    "front-end-sistema-pedidos-quxl.vercel.app",
+]
 
 # Application definition
 
@@ -61,7 +63,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "https://front-end-sistema-pedidos-quxl.vercel.app",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://front-end-sistema-pedidos-quxl.vercel.app",
+]
 
 ROOT_URLCONF = 'sistema_pedidos.urls'
 
@@ -95,8 +102,7 @@ WSGI_APPLICATION = 'sistema_pedidos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-import os
-import dj_database_url
+
 
 DATABASES = {
      'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
