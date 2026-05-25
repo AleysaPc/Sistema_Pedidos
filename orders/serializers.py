@@ -30,19 +30,22 @@ class OrdenSerializer(serializers.ModelSerializer):
                 precio=detalle.get('precio')
             )
 
-        # Notificar al propietario del restaurante cuando se crea una orden
+        # 🔔 NOTIFICAR RESTAURANTE
         crear_notificacion(
             usuario=orden.restaurante.propietario,
-            mensaje=f"Nuevo pedido {orden.numero_orden} recibido",
+            mensaje=f"🆕 Nuevo pedido {orden.numero_orden}",
             orden=orden
         )
 
         return orden
 
 class HistorialOrdenSerializer(serializers.ModelSerializer):
+    orden_numero = serializers.CharField(source="orden.numero_orden", read_only=True)
+    usuario_nombre = serializers.CharField(source="usuario.username", read_only=True)
+
     class Meta:
         model = HistorialOrden
-        fields = '__all__'
+        fields = "__all__"
 
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
