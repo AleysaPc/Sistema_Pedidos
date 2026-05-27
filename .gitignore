@@ -26,9 +26,6 @@ env/
 # Database
 db.sqlite3
 
-# Media
-media/
-
 # Static files
 staticfiles/
 
