@@ -13,6 +13,9 @@ class DetalleOrdenSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrdenSerializer(serializers.ModelSerializer):
+    cliente = UsuarioHistorialSerializer(read_only=True)
+    repartidor = UsuarioHistorialSerializer(read_only=True)
+
     detalles_orden = DetalleOrdenSerializer(many=True, required=False)
 
     class Meta:
