@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Orden, DetalleOrden, HistorialOrden, Notificacion
 from restaurants.serializers import ProductoSerializer
 from .utils import crear_notificacion
+from users.serializers import UsuarioHistorialSerializer
 
 class DetalleOrdenSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer(read_only=True)
@@ -41,7 +42,7 @@ class OrdenSerializer(serializers.ModelSerializer):
 
 class HistorialOrdenSerializer(serializers.ModelSerializer):
     orden_numero = serializers.CharField(source="orden.numero_orden", read_only=True)
-    usuario_nombre = serializers.CharField(source="usuario.username", read_only=True)
+    usuario = UsuarioHistorialSerializer(read_only=True)
 
     class Meta:
         model = HistorialOrden

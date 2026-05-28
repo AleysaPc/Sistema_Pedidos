@@ -22,3 +22,21 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class UsuarioHistorialSerializer(serializers.ModelSerializer):
+    nombre_completo = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "nombre_completo",
+            "telefono",
+            "direccion",
+            "ci",
+            "rol"
+        ]
+
+    def get_nombre_completo(self, obj):
+        return f"{obj.first_name} {obj.last_name}".strip()
