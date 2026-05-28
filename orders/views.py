@@ -20,8 +20,9 @@ class OrdenViewSet(viewsets.ModelViewSet):
         request_user = self.request.user
         orden = serializer.save()
 
-        # 🔥 HISTORIAL (SIEMPRE)
-        crear_historial(orden, request_user, orden.estado)
+        # 🔥 HISTORIAL SOLO SI HAY LOGIN
+        if request_user.is_authenticated:
+            crear_historial(orden, request_user, orden.estado)
 
         # =========================
         # CLIENTE
