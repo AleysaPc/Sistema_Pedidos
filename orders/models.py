@@ -1,11 +1,14 @@
 from django.db import models
 from users.models import User
 from restaurants.models import Restaurante, Producto
-import uuid
+import random
+import string
 
 class Orden(models.Model):
     def generar_numero_orden():
-        return f"ORD-{uuid.uuid4().hex[:10].upper()}"
+        letras = ''.join(random.choices(string.ascii_uppercase, k=2))
+        numeros = random.randint(100, 999)
+        return f"ORD-{letras}{numeros}"
     
     ESTADOS = (
         ('PENDIENTE', 'Pendiente'),
