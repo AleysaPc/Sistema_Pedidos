@@ -48,8 +48,22 @@ class OrdenSerializer(serializers.ModelSerializer):
 
         return orden
 class HistorialOrdenSerializer(serializers.ModelSerializer):
-    orden_numero = serializers.CharField(source="orden.numero_orden", read_only=True)
+    orden_numero = serializers.CharField(
+        source="orden.numero_orden",
+        read_only=True
+    )
+
     usuario = UsuarioHistorialSerializer(read_only=True)
+
+    cliente = UsuarioHistorialSerializer(
+        source="orden.cliente",
+        read_only=True
+    )
+
+    repartidor = UsuarioHistorialSerializer(
+        source="orden.repartidor",
+        read_only=True
+    )
 
     class Meta:
         model = HistorialOrden
