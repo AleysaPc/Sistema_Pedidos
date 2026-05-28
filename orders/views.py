@@ -13,10 +13,13 @@ from users.models import User
 class OrdenViewSet(viewsets.ModelViewSet):
     queryset = Orden.objects.all()
     serializer_class = OrdenSerializer
+    permission_classes = [IsAuthenticated]
+    
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["estado", "cliente", "restaurante", "repartidor"]
 
     def perform_update(self, serializer):
+        
         request_user = self.request.user
         orden = serializer.save()
 

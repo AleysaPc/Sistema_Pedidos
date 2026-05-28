@@ -24,7 +24,13 @@ class OrdenSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         detalles_data = validated_data.pop('detalles_orden', [])
-        orden = Orden.objects.create(**validated_data)
+
+        request = self.context.get("request")
+
+        orden = Orden.objects.create(
+            cliente=request.user,
+            **validated_data
+        )
 
         for detalle in detalles_data:
             DetalleOrden.objects.create(
@@ -34,7 +40,6 @@ class OrdenSerializer(serializers.ModelSerializer):
                 precio=detalle.get('precio')
             )
 
-        # 🔔 NOTIFICAR RESTAURANTE
         crear_notificacion(
             usuario=orden.restaurante.propietario,
             mensaje=f"🆕 Nuevo pedido {orden.numero_orden}",
@@ -42,7 +47,6 @@ class OrdenSerializer(serializers.ModelSerializer):
         )
 
         return orden
-
 class HistorialOrdenSerializer(serializers.ModelSerializer):
     orden_numero = serializers.CharField(source="orden.numero_orden", read_only=True)
     usuario = UsuarioHistorialSerializer(read_only=True)
