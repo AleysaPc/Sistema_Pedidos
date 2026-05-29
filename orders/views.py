@@ -19,13 +19,21 @@ class OrdenViewSet(viewsets.ModelViewSet):
     filterset_fields = ["estado", "cliente", "restaurante", "repartidor"]
 
     def perform_update(self, serializer):
-        
+
         request_user = self.request.user
+
+        # 🔥 obtener estado enviado
+        estado_nuevo = self.request.data.get("estado")
+
         orden = serializer.save()
 
-        # 🔥 HISTORIAL SOLO SI HAY LOGIN
+        # 🔥 HISTORIAL
         if request_user.is_authenticated:
-            crear_historial(orden, request_user, orden.estado)
+            crear_historial(
+                orden,
+                request_user,
+                estado_nuevo or orden.estado
+            )
 
         # =========================
         # CLIENTE
@@ -51,7 +59,6 @@ class OrdenViewSet(viewsets.ModelViewSet):
                 orden=orden
             )
 
-            # repartidores
             repartidores = User.objects.filter(rol='REPARTIDOR')
 
             for r in repartidores:
@@ -105,24 +112,24 @@ class HistorialOrdenViewSet(viewsets.ModelViewSet):
         if orden_id:
             return queryset.filter(
                 orden__numero_orden__icontains=orden_id.strip()
-            ).order_by("-fecha")
+            ).order_by("fecha")
 
         # 👤 CLIENTE
         if user.rol == "CLIENT":
             return queryset.filter(
                 orden__cliente=user
-            ).order_by("-fecha")
+            ).order_by("fecha")
 
         # 🚚 REPARTIDOR
         if user.rol == "REPARTIDOR":
             return queryset.filter(
                 orden__repartidor=user
-            ).order_by("-fecha")
+            ).order_by("fecha")
 
         # 🏪 ADMIN RESTAURANTE
         if user.rol == "ADMIN_RESTAURANT":
             return queryset.filter(
                 orden__restaurante__propietario=user
-            ).order_by("-fecha")
+            ).order_by("fecha")
 
         return HistorialOrden.objects.none()
